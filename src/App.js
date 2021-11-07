@@ -11,7 +11,19 @@ import {BiHeart} from 'react-icons/bi';
 import {FaVimeo} from 'react-icons/fa';
 import {FaLinkedin} from 'react-icons/fa';
 
-const series1 = 'In-House Insights'
+const secondWord = (word) => {
+  return(
+    <span class='graphik-black'> {word}</span>
+  )
+}
+
+const series = (firstword, secondword) => {
+  return (
+    <div>
+     {firstword} {secondWord(secondword)}
+    </div>
+  )
+}
 const series2 = 'New Visions'
 const series3 = 'Partner Programs'
 
@@ -81,10 +93,12 @@ function App() {
       <Container id ='top_text'>
         <Row id = 'title_bar'>
           <Col id = 'start_button'>
-          <button type='button' class='btn btn-dark btn-lg'>
+            <a href='https://vimeo.com/showcase/8089437'>
+          <button type='button' class='btn btn-dark btn-lg' >
             < BiPlay />
             <b> play </b>
-            </button>
+          </button>
+          </a>
 
           </Col>
           <Col>
@@ -99,13 +113,16 @@ function App() {
           <Row>
           <div id ='description'>
             <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
+              In-House Insights is an educational series to help in-house lawyers 
+              learn from their peers at other companies about how to structure and 
+              scale their pro bono programs and efforts. This platform covers a broad 
+              range of topics, and features some of the best in-house pro bono programs 
+              coast-to-coast.            
             </p>
           </div>
         </Row>
       </Container>
-      {/* <div id='gradient' /> */}
-      {/* <img id='hero' src='people-in-office.jpg' /> */}
+
 
     </Container>
      
@@ -115,21 +132,21 @@ function App() {
         </Row>
         <Row>
           <Col>
-         {thumbnail('pink', series1, video1, icon1)}
-         {thumbnail('pink', series1, video1, icon1)}
-         {thumbnail('pink', series1, video1, icon1)}
+         {thumbnail('pink', series('In-house', 'insights'), video1, icon1)}
+         {thumbnail('pink', series('In-house', 'insights'), video1, icon1)}
+         {thumbnail('pink', series('In-house', 'insights'), video1, icon1)}
 
           </Col>
           <Col>
-          {thumbnail('blue', series2, video2, icon2)}
-          {thumbnail('blue', series2, video2, icon2)}
-          {thumbnail('blue', series2, video2, icon2)}
+          {thumbnail('blue', series('New', 'visions'), video2, icon2)}
+          {thumbnail('blue', series('New', 'visions'), video2, icon2)}
+          {thumbnail('blue', series('New', 'visions'), video2, icon2)}
 
           </Col>
           <Col>
-          {thumbnail('yellow', series3, video3, icon3)}
-          {thumbnail('yellow', series3, video3, icon3)}
-          {thumbnail('yellow', series3, video3, icon3)}
+          {thumbnail('yellow', series('Partner', 'programs'), video3, icon3)}
+          {thumbnail('yellow', series('Partner', 'programs'), video3, icon3)}
+          {thumbnail('yellow', series('Partner', 'programs'), video3, icon3)}
           </Col>
         </Row>
       </Container>

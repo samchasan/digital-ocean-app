@@ -75,7 +75,7 @@ p {
   width: inherit;
   height: 500px;
   padding: 0px 0px 0px;
-  background-image: url(people-in-office.jpg);
+  background-image: url(hero.jpg);
   background-size: contain;
   background-repeat: no-repeat;
   display: flex;
@@ -165,6 +165,7 @@ p {
 
 .series-title{
   font-size: 12px;
+  text-transform: uppercase;
 }
 
 .video-title{
@@ -177,6 +178,8 @@ p {
   height: 0;
   border-top: 80px solid;
   border-color: rgba(40, 40, 40, 0.4);
+  /* border-color: linear-gradient(30deg, rgba(0, 0, 0, 0.24) 0%, rgba(0,0,0,0) 100%); */
+  /* border-image-source: linear-gradient(to left, #743ad5, #d53a9d); */
   border-right: 150px solid transparent;
 }
 
@@ -196,12 +199,7 @@ p {
     6px - small 
     0px - extra small
   */
-    
-
-#pink{
-  background-color: rgb(223, 121, 138);
-}
-
+ 
 .thumbnail-icon{
   position: absolute;
   width: 36%;
@@ -212,12 +210,16 @@ p {
 ;
 }
 
+#pink{
+  background-color: #f78d8a
+}
+
 #blue {
-  background-color: rgb(48, 136, 187)
+  background-color: #0e6f9c
 }
 
 #yellow {
-  background-color: rgb(228, 169, 81)
+  background-color: #ffb881
 }
 
 #socials {
@@ -227,26 +229,34 @@ p {
 
 @media (max-width: 576px) { 
   #triangle-bottomright {
-    transform: translate(0px)
+    /* transform: translate(0px) */
   }  
   #top_area{
-    height: 350px;
+    height: 300px;
   }
   p{
     font-size: 12px
+  }
+  .thumbnail-icon{
+    left: 19%;
+    top: 33%
   }
 }
 
 
 @media (min-width: 576px) { 
   #triangle-bottomright {
-    transform: translate(0px)
+    transform: translate(7px)
   }  
   #top_area{
-    height: 360px;
+    height: 310px;
   }
   p{
     font-size: 14px
+  }
+  .thumbnail-icon{
+    top: 31%;
+    left: 19%;
   }
 }
 
@@ -255,7 +265,7 @@ p {
   transform: translate(66px);
   }  
   #top_area{
-    height: 480px;
+    height: 420px;
   }
   p{
     font-size: 16px
@@ -266,10 +276,14 @@ p {
       transform: translate(146px)
       }   
       #top_area{
-        height: 640px;
+        height: 540px;
       }
       p{
         font-size: 18px
+      }
+      .thumbnail-icon{
+        top: 17%;
+        left: 25%;
       }
 }
 
