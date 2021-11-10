@@ -77,7 +77,7 @@ class App extends Component {
 
   reactModal = (fullLink) => {
     return(
-      <Modal id="modal-content" show={this.state.isOpen}>
+      <Modal id="modal-content" class ='modal-lg' show={this.state.isOpen}>
         <Modal.Header closeButton onClick={this.closeModal}>
           <Modal.Title>Modal heading</Modal.Title>
         </Modal.Header>
