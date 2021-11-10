@@ -1,6 +1,6 @@
 import './App.css';
-import React from 'react';
-
+import React, {Component} from 'react';
+// import Component from 'react';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
@@ -10,6 +10,7 @@ import {BiPlay} from 'react-icons/bi';
 import {BiHeart} from 'react-icons/bi';
 import {FaVimeo} from 'react-icons/fa';
 import {FaLinkedin} from 'react-icons/fa';
+import  Modal  from "react-bootstrap/Modal";
 
 const secondWord = (word) => {
   return(
@@ -34,7 +35,10 @@ const video3 = 'Why should in house teams do Pro-Bono?'
 const icon1 = 'heart.svg'
 const icon2 = 'clipboard.svg'
 const icon3 = 'people.svg'
+{/* <iframe title="vimeo-player" src="https://player.vimeo.com/video/245287237?h=5f3fe969c8" width="640" height="360" frameborder="0" allowfullscreen></iframe> */}
+const link = "https://player.vimeo.com/video/245287237"
 
+let fullLink = link + "?h=5f3fe969c8 allowfullscreen"
 
 const triangles = () => {
   return(
@@ -44,7 +48,7 @@ const triangles = () => {
           </div>
   )}
 
-  const thumbnail = (color, series_title, video_title, icon) => {
+  const  thumbnail = (color, series_title, video_title, icon) => {
      return(
        <div class='thumbnail' id={color} >
          <div class='thumbnail-text'>
@@ -61,17 +65,35 @@ const triangles = () => {
         )
   }
 
-  // const generateThumbs = (color, series_title, video_title, icon) => {
-  //   const thumbAmount = 3
-  //   for (let i = 0; i < thumbAmount; i++) {
-  //     return(
+  // const  
 
-  //     )
-  //   }
+class App extends Component {
+  state = {
+    isOpen: false
+  };
 
-  // }
+  openModal = () => this.setState({ isOpen: true });
+  closeModal = () => this.setState({ isOpen: false });
 
-function App() {
+  reactModal = (fullLink) => {
+    return(
+      <Modal id="modal-content" show={this.state.isOpen}>
+        <Modal.Header closeButton onClick={this.closeModal}>
+          <Modal.Title>Modal heading</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <iframe src={fullLink} frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="WBPC sponsorship"></iframe>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={this.closeModal} >Close</Button>
+        </Modal.Footer>
+      </Modal>
+      )
+  }
+
+
+  render (){
+    
   return (
     <div className='App'>
     <Container id='top_area'>
@@ -90,15 +112,18 @@ function App() {
           </form> 
         </Container>
       </nav>
+      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        {this.reactModal(fullLink)}
+        </div>
       <Container id ='top_text'>
         <Row id = 'title_bar'>
           <Col id = 'start_button'>
-            <a href='https://vimeo.com/showcase/8089437'>
-          <button type='button' class='btn btn-dark btn-lg' >
+            
+          <button type='button' class='btn btn-dark btn-lg' onClick={this.openModal}>
             < BiPlay />
             <b> play </b>
           </button>
-          </a>
+          
 
           </Col>
           <Col>
@@ -167,4 +192,5 @@ function App() {
   );
 }
 
+}
 export default App;
