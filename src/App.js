@@ -38,6 +38,8 @@ const icon3 = 'people.svg'
 {/* <iframe title="vimeo-player" src="https://player.vimeo.com/video/245287237?h=5f3fe969c8" width="640" height="360" frameborder="0" allowfullscreen></iframe> */}
 const link = "https://player.vimeo.com/video/245287237"
 
+const videoTitle = 'Sharks in the Sky!'
+
 let fullLink = link + "?h=5f3fe969c8 allowfullscreen"
 
 const triangles = () => {
@@ -75,17 +77,25 @@ class App extends Component {
   openModal = () => this.setState({ isOpen: true });
   closeModal = () => this.setState({ isOpen: false });
 
-  reactModal = (fullLink) => {
+  reactModal = (fullLink, videoTitle) => {
     return(
-      <Modal id="modal-content" class ='modal-lg' show={this.state.isOpen}>
-        <Modal.Header closeButton onClick={this.closeModal}>
-          <Modal.Title>Modal heading</Modal.Title>
-        </Modal.Header>
+      <Modal id="modal-content" show={this.state.isOpen}>
+        {/* <Modal.Header closeButton onClick={this.closeModal}> */}
+          {/* <Modal.Title>{videoTitle}</Modal.Title> */}
+        {/* </Modal.Header> */}
         <Modal.Body>
           <iframe src={fullLink} frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="WBPC sponsorship"></iframe>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={this.closeModal} >Close</Button>
+          <Row>
+            </Row>
+          <Col>
+          <span id='video-title'>{videoTitle}</span> 
+          </Col>
+        <Col xs = {2}></Col>
+        <Col>
+          <Button id='close-button' variant="secondary" onClick={this.closeModal} >Close</Button>
+        </Col>
         </Modal.Footer>
       </Modal>
       )
@@ -112,8 +122,8 @@ class App extends Component {
           </form> 
         </Container>
       </nav>
-      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        {this.reactModal(fullLink)}
+      <div class="modal fade modal-lg" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        {this.reactModal(fullLink, videoTitle)}
         </div>
       <Container id ='top_text'>
         <Row id = 'title_bar'>
