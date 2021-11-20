@@ -12,6 +12,10 @@ import {FaVimeo} from 'react-icons/fa';
 import {FaLinkedin} from 'react-icons/fa';
 import  Modal  from "react-bootstrap/Modal";
 
+var Vimeo = require('vimeo').Vimeo;
+
+const token = 'abaf7becc2c487cbad4e4227a7572111'
+
 const secondWord = (word) => {
   return(
     <span class='graphik-black'> {word}</span>
@@ -42,6 +46,8 @@ const videoTitle = 'Sharks in the Sky!'
 
 let fullLink = link + "?h=5f3fe969c8 allowfullscreen"
 
+
+
 const triangles = () => {
   return(
        <div id='triangles' >
@@ -67,24 +73,104 @@ const triangles = () => {
         )
   }
 
-  // const  
+  // const [data,setData]=useState([]);
 
 class App extends Component {
   state = {
-    isOpen: false
+    isOpen: false,
+    iframe: null
   };
 
-  openModal = () => this.setState({ isOpen: true });
+  iframeHTML = (html) => {
+    if(html){
+      console.log('printing html', html)
+      var modal = document.getElementsByClassName('modal-body')
+      console.log(modal)
+      function createMarkup() {
+        return {__html: html};
+      }
+      return <iframe dangerouslySetInnerHTML={createMarkup()} />;
+
+      // return(
+      //   html
+      //   )
+    }
+}
+
+  componentDidMount(){
+    this.getData()
+  }
+
+  generateThumbs = (vimeoData) => {
+    console.log('in generating thumbs')
+    const data = vimeoData.data
+  
+    for (let i = 0; i < data.length; i++) {
+      let video = data[i]
+      // console.log(video)
+      console.log(i, video.name, video.embed, video.pictures)
+  
+      var node = document.createElement("li")
+      // var a = document.createElement('a');
+      const a = () => {
+        return(
+          <a onclick = {console.log('hello')}>
+            {video.name}
+            <img src={video.pictures.sizes[1].link}/>
+          </a>
+        )
+      }
+      // var linkText = document.createTextNode(video.name);
+      // a.appendChild(linkText);
+      // a.title = linkText;
+      // a.onclick = this.openModal(video.embed.html)
+      // a.onclick = console.log('hello')
+      
+      // var img = new Image()
+      // img.src = video.pictures.sizes[1].link
+      
+      // on hover show ---> link_with_play_button
+      // on click bring up modal with ---> embed.html
+  
+      // a.appendChild(img)
+      node.appendChild({a});
+      document.getElementById("myList").appendChild(node);
+    }
+  }
+
+  getData=()=>{
+    fetch('./DWTvimeodata.json'
+    ,{
+      headers : { 
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      }
+    }
+    )
+      .then(function(response){
+        console.log(response)
+        return response.json();
+      })
+      .then((data) => {
+        console.log('generatingthumbs', data)
+        this.generateThumbs(data)
+      })
+  }
+  
+  openModal = (iframe) => this.setState({ isOpen: true, iframe: this.iframeHTML(iframe) });
   closeModal = () => this.setState({ isOpen: false });
 
-  reactModal = (fullLink, videoTitle) => {
+  reactModal = (videoTitle) => {
     return(
       <Modal id="modal-content" show={this.state.isOpen}>
         {/* <Modal.Header closeButton onClick={this.closeModal}> */}
           {/* <Modal.Title>{videoTitle}</Modal.Title> */}
         {/* </Modal.Header> */}
         <Modal.Body>
-          <iframe src={fullLink} frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="WBPC sponsorship"></iframe>
+         
+          {/* {this.state.iframe} */}
+          {/* <iframe src="https://player.vimeo.com/video/267859540?h=f1c560223c&amp;title=0&amp;byline=0&amp;portrait=0&amp;speed=0&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=231098" width="1280" height="720" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="Dana Kanze - WEB 2018"></iframe> */}
+          {/* <iframe src={fullLink} frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="WBPC sponsorship"></iframe> */}
         </Modal.Body>
         <Modal.Footer>
           <Row>
@@ -128,12 +214,15 @@ class App extends Component {
       <Container id ='top_text'>
         <Row id = 'title_bar'>
           <Col id = 'start_button'>
-            
-          <button type='button' class='btn btn-dark btn-lg' onClick={this.openModal}>
+            {/* <a href = {url} >  */}
+          <button type='button' class='btn btn-dark btn-lg' 
+          // onClick={this.openModal}
+          // onClick = {getVimeoData}
+          >
             < BiPlay />
             <b> play </b>
           </button>
-          
+          {/* </a> */}
 
           </Col>
           <Col>
@@ -183,6 +272,14 @@ class App extends Component {
           {thumbnail('yellow', series('Partner', 'programs'), video3, icon3)}
           {thumbnail('yellow', series('Partner', 'programs'), video3, icon3)}
           </Col>
+        </Row>
+        <Row>
+          {/* {generateThumbs()} */}
+          <ul id='myList'>
+            <li>
+              Imported videos
+            </li>
+          </ul>
         </Row>
       </Container>
       <Container id='footer'>
