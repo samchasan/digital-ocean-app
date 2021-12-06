@@ -11,7 +11,12 @@ import {BiHeart} from 'react-icons/bi';
 import {FaVimeo} from 'react-icons/fa';
 import {FaLinkedin} from 'react-icons/fa';
 import  Modal  from "react-bootstrap/Modal";
+// import { reactModal, iframeHTML} from "./Modal.jsx"
 
+// const modalFxns = {reactModal, iframeHTML}
+
+// console.log('modal functions imported', modalFxns)
+//
 var Vimeo = require('vimeo').Vimeo;
 
 const token = 'abaf7becc2c487cbad4e4227a7572111'
@@ -40,12 +45,13 @@ const icon1 = 'heart.svg'
 const icon2 = 'clipboard.svg'
 const icon3 = 'people.svg'
 {/* <iframe title="vimeo-player" src="https://player.vimeo.com/video/245287237?h=5f3fe969c8" width="640" height="360" frameborder="0" allowfullscreen></iframe> */}
-const link = "https://player.vimeo.com/video/245287237"
+const link = "Sharks in the Sky!"
 
 const videoTitle = 'Sharks in the Sky!'
 
 let fullLink = link + "?h=5f3fe969c8 allowfullscreen"
 
+const src = "https://player.vimeo.com/video/629447810?h=784c37af61 title=0 byline=0 portrait=0 speed=0 badge=0 autopause=0 player_id=0 app_id=231098"
 
 
 const triangles = () => {
@@ -78,7 +84,10 @@ const triangles = () => {
 class App extends Component {
   state = {
     isOpen: false,
-    iframe: null
+    iframe: null,
+    data: [],
+    name: '',
+    src: "https://player.vimeo.com/video/629447810?h=784c37af61 title=0 byline=0 portrait=0 speed=0 badge=0 autopause=0 player_id=0 app_id=231098"
   };
 
   iframeHTML = (html) => {
@@ -90,10 +99,6 @@ class App extends Component {
         return {__html: html};
       }
       return <iframe dangerouslySetInnerHTML={createMarkup()} />;
-
-      // return(
-      //   html
-      //   )
     }
 }
 
@@ -101,41 +106,40 @@ class App extends Component {
     this.getData()
   }
 
-  generateThumbs = (vimeoData) => {
-    console.log('in generating thumbs')
+  videoThumbs(data){
+    
+      return (
+        <div className="thumbnails">
+          {data.map((video) => (
+            <div className="thumbnail">{video.name}
+            <img src={video.thumb.link} />
+            <button onClick={() => {this.openModal(video)}} >WATCH</button>
+            </div>
+          ))}
+        </div>
+      );
+  }
+
+
+  setData = (vimeoData) => {
     const data = vimeoData.data
-  
+    
+    const newData = []
+
     for (let i = 0; i < data.length; i++) {
       let video = data[i]
-      // console.log(video)
-      console.log(i, video.name, video.embed, video.pictures)
-  
-      var node = document.createElement("li")
-      // var a = document.createElement('a');
-      const a = () => {
-        return(
-          <a onclick = {console.log('hello')}>
-            {video.name}
-            <img src={video.pictures.sizes[1].link}/>
-          </a>
-        )
+      let embed = video.embed.html
+      if(embed){
+        let source = embed.substr(13,167)
+        newData.push({
+          name: video.name,
+          src: source,
+          thumb: video.pictures.sizes[2]
+        })
       }
-      // var linkText = document.createTextNode(video.name);
-      // a.appendChild(linkText);
-      // a.title = linkText;
-      // a.onclick = this.openModal(video.embed.html)
-      // a.onclick = console.log('hello')
-      
-      // var img = new Image()
-      // img.src = video.pictures.sizes[1].link
-      
-      // on hover show ---> link_with_play_button
-      // on click bring up modal with ---> embed.html
-  
-      // a.appendChild(img)
-      node.appendChild({a});
-      document.getElementById("myList").appendChild(node);
     }
+    this.setState({data: newData})
+    console.log(this.state.data)
   }
 
   getData=()=>{
@@ -153,30 +157,32 @@ class App extends Component {
       })
       .then((data) => {
         console.log('generatingthumbs', data)
-        this.generateThumbs(data)
+        this.setData(data)
       })
   }
   
-  openModal = (iframe) => this.setState({ isOpen: true, iframe: this.iframeHTML(iframe) });
+  openModal = (source) => {
+    console.log('iframe source', source)
+    this.setState({ 
+      isOpen: true, 
+      name: source.name,
+      src: source.src })
+  };
   closeModal = () => this.setState({ isOpen: false });
 
-  reactModal = (videoTitle) => {
+
+  reactModal = (fullLink, videoTitle) => {
     return(
       <Modal id="modal-content" show={this.state.isOpen}>
-        {/* <Modal.Header closeButton onClick={this.closeModal}> */}
-          {/* <Modal.Title>{videoTitle}</Modal.Title> */}
-        {/* </Modal.Header> */}
+        
         <Modal.Body>
-         
-          {/* {this.state.iframe} */}
-          {/* <iframe src="https://player.vimeo.com/video/267859540?h=f1c560223c&amp;title=0&amp;byline=0&amp;portrait=0&amp;speed=0&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=231098" width="1280" height="720" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="Dana Kanze - WEB 2018"></iframe> */}
-          {/* <iframe src={fullLink} frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="WBPC sponsorship"></iframe> */}
+            <iframe src={this.state.src} width="1920" height="1080" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="2021 WEB Cohort Announcement"></iframe>      
         </Modal.Body>
         <Modal.Footer>
           <Row>
             </Row>
           <Col>
-          <span id='video-title'>{videoTitle}</span> 
+          <span id='video-title'>{this.state.name}</span> 
           </Col>
         <Col xs = {2}></Col>
         <Col>
@@ -216,7 +222,7 @@ class App extends Component {
           <Col id = 'start_button'>
             {/* <a href = {url} >  */}
           <button type='button' class='btn btn-dark btn-lg' 
-          // onClick={this.openModal}
+          onClick={this.openModal}
           // onClick = {getVimeoData}
           >
             < BiPlay />
@@ -274,7 +280,7 @@ class App extends Component {
           </Col>
         </Row>
         <Row>
-          {/* {generateThumbs()} */}
+        {this.videoThumbs(this.state.data)}
           <ul id='myList'>
             <li>
               Imported videos
