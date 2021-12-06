@@ -17,9 +17,9 @@ import  Modal  from "react-bootstrap/Modal";
 
 // console.log('modal functions imported', modalFxns)
 //
-var Vimeo = require('vimeo').Vimeo;
+// var Vimeo = require('vimeo').Vimeo;
 
-const token = 'abaf7becc2c487cbad4e4227a7572111'
+// const token = 'abaf7becc2c487cbad4e4227a7572111'
 
 const secondWord = (word) => {
   return(
