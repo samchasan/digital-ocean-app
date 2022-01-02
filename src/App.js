@@ -1,5 +1,6 @@
 import './App.css';
 import React, {Component} from 'react';
+
 // import Component from 'react';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
@@ -11,75 +12,7 @@ import {BiHeart} from 'react-icons/bi';
 import {FaVimeo} from 'react-icons/fa';
 import {FaLinkedin} from 'react-icons/fa';
 import  Modal  from "react-bootstrap/Modal";
-// import { reactModal, iframeHTML} from "./Modal.jsx"
 
-// const modalFxns = {reactModal, iframeHTML}
-
-// console.log('modal functions imported', modalFxns)
-//
-// var Vimeo = require('vimeo').Vimeo;
-
-// const token = 'abaf7becc2c487cbad4e4227a7572111'
-
-const secondWord = (word) => {
-  return(
-    <span class='graphik-black'> {word}</span>
-  )
-}
-
-const series = (firstword, secondword) => {
-  return (
-    <div>
-     {firstword} {secondWord(secondword)}
-    </div>
-  )
-}
-const series2 = 'New Visions'
-const series3 = 'Partner Programs'
-
-const video1 = 'Why is Pro-Bono personally important to you?'
-const video2 = 'How do you create a successful Pro-Bono program?'
-const video3 = 'Why should in house teams do Pro-Bono?'
-
-const icon1 = 'heart.svg'
-const icon2 = 'clipboard.svg'
-const icon3 = 'people.svg'
-{/* <iframe title="vimeo-player" src="https://player.vimeo.com/video/245287237?h=5f3fe969c8" width="640" height="360" frameborder="0" allowfullscreen></iframe> */}
-const link = "Sharks in the Sky!"
-
-const videoTitle = 'Sharks in the Sky!'
-
-let fullLink = link + "?h=5f3fe969c8 allowfullscreen"
-
-const src = "https://player.vimeo.com/video/629447810?h=784c37af61 title=0 byline=0 portrait=0 speed=0 badge=0 autopause=0 player_id=0 app_id=231098"
-
-
-const triangles = () => {
-  return(
-       <div id='triangles' >
-        <div id='triangle-topleft' />
-          <div id='triangle-bottomright' />
-          </div>
-  )}
-
-  const  thumbnail = (color, series_title, video_title, icon) => {
-     return(
-       <div class='thumbnail' id={color} >
-         <div class='thumbnail-text'>
-           <div class='series-title'>
-              {series_title}
-           </div>
-         <div class='video-title'>
-           {video_title}
-           </div>
-           </div>
-            {triangles()}
-            <img class='thumbnail-icon' src={icon} />
-          </div> 
-        )
-  }
-
-  // const [data,setData]=useState([]);
 
 class App extends Component {
   state = {
@@ -102,48 +35,120 @@ class App extends Component {
     }
 }
 
+
+
   componentDidMount(){
     this.getData()
   }
 
-  videoThumbs(data){
-    
-      return (
-        <div className="thumbnails">
-          {data.map((video) => (
-            <div className="thumbnail">{video.name}
-            <img src={video.thumb.link} />
-            <button onClick={() => {this.openModal(video)}} >WATCH</button>
-            </div>
-          ))}
-        </div>
-      );
+  thumbnails = (data) => {
+
+    console.log('reading data', data)
+
+    return(
+      <div className = {data[0].tag} >
+        {data.map((video) => (
+          <div className="thumbnail">
+            <button onClick={() => {this.openModal(video)}} >
+              {/* {video.name} */}
+              <img id='thumbnail_image' src={video.thumb.link} />
+            </button>
+          </div>
+        ))}
+    </div>
+    )
   }
 
+  generateThumbnails(tag){
+
+    // console.log('data', this.state, 'tag', tag)
+
+const dataLength = Object.keys(this.state.data).length
+
+
+console.log('data length', dataLength)
+
+    if(dataLength > 0){
+
+    let redData = this.state.data.red
+    let blueData = this.state.data.blue
+    let goldData = this.state.data.gold
+
+    console.log('making thumbs')
+
+
+    switch (tag) {
+      case "red":
+       return (this.thumbnails(redData))
+      break;
+
+      case "blue":
+       return (this.thumbnails(blueData))
+      break;
+      
+        case "gold":
+        return (this.thumbnails(goldData))
+      break;
+    }
+  }
+  }
 
   setData = (vimeoData) => {
     const data = vimeoData.data
     
-    const newData = []
+    let redData = []
+    let blueData = []
+    let goldData = []
+    let nullData = []
+
+
+    
+    const genArray = (array, source, video) => {
+      array.push({
+        name: video.name,
+        src: source,
+        thumb: video.pictures.sizes[2],
+        tag: video.tags[0].tag
+      })
+    }
 
     for (let i = 0; i < data.length; i++) {
       let video = data[i]
       let embed = video.embed.html
+
+      // console.log('video', video)
+
       if(embed){
         let source = embed.substr(13,167)
-        newData.push({
-          name: video.name,
-          src: source,
-          thumb: video.pictures.sizes[2]
-        })
+
+        // console.log('video tags', video.tags[0])
+
+        if(video.tags.length > 0 ){
+          switch (video.tags[0].tag) {
+            case "red":
+              genArray(redData, source, video)
+              break;
+            case "blue":
+              genArray(blueData, source, video)
+              break;
+            case "gold":
+              genArray(goldData, source, video)
+              break;
+            case null:
+              genArray(nullData, source, video)
+          }        
+      }
+      
       }
     }
-    this.setState({data: newData})
+
+    this.setState({data: {red: redData, blue: blueData, gold: goldData}})
     console.log(this.state.data)
+    
   }
 
   getData=()=>{
-    fetch('./DWTvimeodata.json'
+    fetch('/InHouseInsights.json'
     ,{
       headers : { 
         'Content-Type': 'application/json',
@@ -156,7 +161,7 @@ class App extends Component {
         return response.json();
       })
       .then((data) => {
-        console.log('generatingthumbs', data)
+        // console.log('generatingthumbs', data)
         this.setData(data)
       })
   }
@@ -171,24 +176,22 @@ class App extends Component {
   closeModal = () => this.setState({ isOpen: false });
 
 
-  reactModal = (fullLink, videoTitle) => {
+  reactModal = ( ) => {
+    // const setShow = this.(false);
+
+    const handleClose = () => this.setState({isOpen: false});
+
+
     return(
-      <Modal id="modal-content" show={this.state.isOpen}>
-        
+      <Modal id="modal-content" 
+        show={this.state.isOpen}
+        onHide={handleClose}
+          >
         <Modal.Body>
-            <iframe src={this.state.src} width="1920" height="1080" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="2021 WEB Cohort Announcement"></iframe>      
+            <iframe src={this.state.src} 
+              frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>      
         </Modal.Body>
-        <Modal.Footer>
-          <Row>
-            </Row>
-          <Col>
-          <span id='video-title'>{this.state.name}</span> 
-          </Col>
-        <Col xs = {2}></Col>
-        <Col>
-          <Button id='close-button' variant="secondary" onClick={this.closeModal} >Close</Button>
-        </Col>
-        </Modal.Footer>
+       
       </Modal>
       )
   }
@@ -215,16 +218,14 @@ class App extends Component {
         </Container>
       </nav>
       <div class="modal fade modal-lg" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        {this.reactModal(fullLink, videoTitle)}
+        {this.reactModal()}
         </div>
       <Container id ='top_text'>
         <Row id = 'title_bar'>
           <Col id = 'start_button'>
-            {/* <a href = {url} >  */}
           <button type='button' class='btn btn-dark btn-lg' 
           onClick={this.openModal}
-          // onClick = {getVimeoData}
-          >
+            >
             < BiPlay />
             <b> play </b>
           </button>
@@ -262,30 +263,17 @@ class App extends Component {
         </Row>
         <Row>
           <Col>
-         {thumbnail('pink', series('In-house', 'insights'), video1, icon1)}
-         {thumbnail('pink', series('In-house', 'insights'), video1, icon1)}
-         {thumbnail('pink', series('In-house', 'insights'), video1, icon1)}
-
+            {this.generateThumbnails('red')}
           </Col>
           <Col>
-          {thumbnail('blue', series('New', 'visions'), video2, icon2)}
-          {thumbnail('blue', series('New', 'visions'), video2, icon2)}
-          {thumbnail('blue', series('New', 'visions'), video2, icon2)}
-
+            {this.generateThumbnails('blue')}
           </Col>
           <Col>
-          {thumbnail('yellow', series('Partner', 'programs'), video3, icon3)}
-          {thumbnail('yellow', series('Partner', 'programs'), video3, icon3)}
-          {thumbnail('yellow', series('Partner', 'programs'), video3, icon3)}
-          </Col>
+            {this.generateThumbnails('gold')}
+           </Col>
         </Row>
         <Row>
-        {this.videoThumbs(this.state.data)}
-          <ul id='myList'>
-            <li>
-              Imported videos
-            </li>
-          </ul>
+      
         </Row>
       </Container>
       <Container id='footer'>
