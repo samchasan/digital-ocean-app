@@ -13,6 +13,7 @@ import {FaVimeo} from 'react-icons/fa';
 import {FaLinkedin} from 'react-icons/fa';
 import  Modal  from "react-bootstrap/Modal";
 
+const categories = ['red', 'blue', 'gold']
 
 class App extends Component {
   state = {
@@ -262,13 +263,40 @@ console.log('data length', dataLength)
           <span id='episodes' class='graphik-black'> Episodes </span>
         </Row>
         <Row>
-          <Col>
+
+          {/* 
+          
+          fx returns 
+          
+          videoList(categories)
+
+          videoList = (categories) => {
+            categories.forEach((category) = > {
+              
+              let screenWidth = screen.width;
+
+              if(screenWidth < 576)
+
+              {
+                generateAccordions(category)! 
+              }
+              else {
+                  this.generateThumbnails(category) 
+              }
+
+            })
+
+          }
+          
+          */}
+
+          <Col  sm={4} lg={true}>
             {this.generateThumbnails('red')}
-          </Col>
-          <Col>
+          </Col >
+          <Col  sm={4} lg={true}>
             {this.generateThumbnails('blue')}
           </Col>
-          <Col>
+          <Col  sm={4} lg={true}>
             {this.generateThumbnails('gold')}
            </Col>
         </Row>
